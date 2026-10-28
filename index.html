@@ -120,6 +120,7 @@
   <script src="thirdparty/turf.min.js"></script>
   <script src="thirdparty/openlocationcode.min.js"></script>
   <script src="thirdparty/leaflet-double-touch-drag-zoom.js"></script>
+  <script src="london-zones.js"></script>
   <script type="module">
     import { h, render } from './thirdparty/preact.js';
 let previewLayer;
@@ -156,9 +157,17 @@ let previewLayer;
 
 
 (() => {
-  // Rough bounding box around TfL fare zones 1+2
-  const londonBox = turf.bboxPolygon([-0.27, 51.44, 0.03, 51.58]);
-  const mergedPolygon = turf.mask(londonBox);
+  // Everything outside TfL fare zones 1+2 is masked out
+  const zones1and2 = turf.polygon([window.LONDON_ZONES.zone1and2]);
+  const mergedPolygon = turf.mask(zones1and2);
+
+  // Zone 1 border for orientation only, not part of the playable area
+  L.polyline(window.LONDON_ZONES.zone1.map(([lng, lat]) => [lat, lng]), {
+    color: "red",
+    weight: 2,
+    dashArray: "6 6",
+    interactive: false,
+  }).addTo(map);
 
   features.push(mergedPolygon);
 
