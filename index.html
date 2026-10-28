@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Berlin Transit Map</title>
+  <title>London Zone 1+2 Map</title>
   <link rel="stylesheet" href="thirdparty/leaflet.css" />
   <style>
     body,
@@ -128,7 +128,7 @@ let previewLayer;
       attributionControl: false,
       doubleTouchDragZoom: true,
       crossOrigin: true,
-    }).setView([35.0116, 135.7681], 13);
+    }).setView([51.5074, -0.1278], 12);
 
     map.on("click", function (e) {
       const plusCode = OpenLocationCode.encode(
@@ -156,8 +156,9 @@ let previewLayer;
 
 
 (() => {
-  const kyotoBox = turf.bboxPolygon([135.60, 34.90, 135.90, 35.10]);
-  const mergedPolygon = turf.mask(kyotoBox);
+  // Rough bounding box around TfL fare zones 1+2
+  const londonBox = turf.bboxPolygon([-0.27, 51.44, 0.03, 51.58]);
+  const mergedPolygon = turf.mask(londonBox);
 
   features.push(mergedPolygon);
 
@@ -226,7 +227,7 @@ let previewLayer;
       .addEventListener("change", updatePreview);
 
     // Accepts full plus codes as well as Google Maps short codes
-    // (e.g. "XPWQ+7RQ Kyoto"), recovering the latter relative to the
+    // (e.g. "GV5H+X2 London"), recovering the latter relative to the
     // current map center.
     function decodePlusCode(plusCode) {
       let code = plusCode.trim();
